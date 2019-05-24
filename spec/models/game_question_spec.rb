@@ -37,5 +37,16 @@ RSpec.describe GameQuestion, type: :model do
       end
 
     end
+
+    # Метод correct_answer_key возвращает правильный ответ
+    # Сначала вызовем этот метод, чтобы он вернул ключ правильного ответа,
+    # потом передаем этот ключ в метод answer_correct? и проверяем, что переданный
+    # ключ действительно был правильным ответом.
+    context 'task 61-5' do
+      it 'GameQuestion#correct_answer_key' do
+        correct_answer =  game_question.correct_answer_key
+        expect(game_question.answer_correct?(correct_answer)).to be_truthy
+      end
+    end
   end
 end
