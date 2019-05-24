@@ -123,4 +123,34 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.previous_level).to eq(9)
     end
   end
+
+  describe 'task 61-7' do
+    context 'Ответ правильный' do
+      it 'Game#answer_current_question!' do
+        game_w_questions.current_level = 1
+        expect(game_w_questions.answer_current_question!('d')).to be_truthy
+      end
+    end
+
+    context 'Ответ неправильный' do
+      it 'Game#answer_current_question!' do
+        game_w_questions.current_level = 1
+        expect(game_w_questions.answer_current_question!('c')).to be_falsy
+      end
+    end
+
+    context 'Ответ последний' do
+      it 'Game#answer_current_question!' do
+        game_w_questions.current_level = 14
+        expect(game_w_questions.answer_current_question!('d')).to be_truthy
+      end
+    end
+
+    context 'Ответ по истечении времени' do
+      it 'Game#answer_current_question!' do
+        game_w_questions.created_at = Time.now - (1*35*60)
+        expect(game_w_questions.answer_current_question!('d')).to be_falsy
+      end
+    end
+  end
 end
