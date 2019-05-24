@@ -109,4 +109,18 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:money)   # :money — игра завершена, игрок забрал деньги
     end
   end
+
+  context 'task 61-6' do
+    it 'Game#current_game_question' do
+      expect(game_w_questions.current_game_question[:a]).to eq(4)
+      expect(game_w_questions.current_game_question[:b]).to eq(3)
+      expect(game_w_questions.current_game_question[:c]).to eq(2)
+      expect(game_w_questions.current_game_question[:d]).to eq(1)
+    end
+
+    it 'Game#previous_level' do
+      game_w_questions.current_level = 10
+      expect(game_w_questions.previous_level).to eq(9)
+    end
+  end
 end
