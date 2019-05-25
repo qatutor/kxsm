@@ -39,13 +39,12 @@ RSpec.describe GameQuestion, type: :model do
     end
 
     # Метод correct_answer_key возвращает правильный ответ
-    # Сначала вызовем этот метод, чтобы он вернул ключ правильного ответа,
-    # потом передаем этот ключ в метод answer_correct? и проверяем, что переданный
-    # ключ действительно был правильным ответом.
+    # let(:game_question) {  FactoryGirl.create(:game_question, a: 2, b: 1, c: 4, d: 3) }
+    # При создании game_question, указали, что правильный ответ - b
+    # Проверяем что метод возвращает b
     context 'task 61-5' do
       it 'GameQuestion#correct_answer_key' do
-        correct_answer =  game_question.correct_answer_key
-        expect(game_question.answer_correct?(correct_answer)).to be_truthy
+        expect(game_question.correct_answer_key).to eq('b')
       end
     end
   end
