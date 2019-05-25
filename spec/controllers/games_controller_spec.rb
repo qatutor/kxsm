@@ -29,6 +29,7 @@ RSpec.describe GamesController, type: :controller do
 
     it 'shows game' do
       get :show, id: game_w_questions.id
+
       game = assigns(:game)
       expect(game.finished?).to be_falsey
       expect(game.user).to eq(user)
@@ -44,5 +45,34 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to(game_path(game))
       expect(flash.empty?).to be_truthy
     end
+
+    context 'task 62-1' do
+      it 'games#show is not displayed for the different user' do
+        different_game = FactoryGirl.create(:game_with_questions)
+        get :show, id: different_game.id
+        expect(response.status).to_not eq(200)
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to be
+      end
+    end
+
+    context 'task 62-2' do
+      it 'user requests money before game time expires' do
+        game_w_questions.update_attribute(:current_level, 2)
+        put :take_money, id:game_w_questions.id
+        game = assigns(:game)
+
+        expect(game.finished?).to be_truthy
+        expect(game.prize).to be(200)
+
+        user.reload
+        expect(user.balance).to be(200)
+
+        expect(response).to redirect_to(user_path(user))
+        expect(flash[:warning]).to be
+      end
+    end
   end
+
+
 end
