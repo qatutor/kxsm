@@ -13,6 +13,34 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to be
     end
+
+    describe 'task 62-4' do
+      it 'create a new game' do
+        post :create
+        expect(response.status).not_to eq(200)
+        expect(response).to redirect_to(new_user_session_path)
+        expect(flash[:alert]).to be
+      end
+
+      it 'takes money' do
+        game_w_questions.update_attribute(:current_level, 2)
+        put :take_money, id:game_w_questions.id
+        game = assigns(:game)
+        expect(game).to be_nil
+        expect(response.status).not_to eq(200)
+        expect(response).to redirect_to(new_user_session_path)
+        expect(flash[:alert]).to be
+      end
+
+      it 'answers the question' do
+        put :answer, id:game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key
+        game = assigns(:game)
+        expect(game).to be_nil
+        expect(response.status).not_to eq(200)
+        expect(response).to redirect_to(new_user_session_path)
+        expect(flash[:alert]).to be
+      end
+    end
   end
 
   context 'authorized user' do
@@ -70,6 +98,17 @@ RSpec.describe GamesController, type: :controller do
 
         expect(response).to redirect_to(user_path(user))
         expect(flash[:warning]).to be
+      end
+    end
+
+    context 'task 62-3' do
+      it 'user can not start a new game if not completed the current' do
+        expect(game_w_questions.finished?).to be_falsey
+        expect { post :create }.to change(Game, :count).by(0)
+        game = assigns(:game)
+        expect(game).to be_nil
+        expect(response).to redirect_to(game_path(game_w_questions))
+        expect(flash[:alert]).to be
       end
     end
   end
