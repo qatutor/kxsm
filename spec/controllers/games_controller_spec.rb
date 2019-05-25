@@ -111,7 +111,19 @@ RSpec.describe GamesController, type: :controller do
         expect(flash[:alert]).to be
       end
     end
+
+    context 'task 62-5' do
+      it 'verifies not correct answer' do
+        game_w_questions.update_attribute(:current_level, 5)
+        put :answer, id:game_w_questions.id, letter: 'c'
+        game = assigns(:game)
+        expect(game).not_to be_nil
+        expect(game.current_level).not_to be > 5
+        expect(game.finished?).to be_truthy
+        expect(game.prize).to be(1000)
+        expect(response).to redirect_to(user_path(user))
+        expect(flash[:alert]).to be
+      end
+    end
   end
-
-
 end
