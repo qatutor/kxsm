@@ -129,6 +129,9 @@ RSpec.describe Game, type: :model do
       it 'Game#answer_current_question!' do
         game_w_questions.current_level = 1
         expect(game_w_questions.answer_current_question!('d')).to be_truthy
+        expect(game_w_questions.status).to eq(:in_progress)
+        expect(game_w_questions.finished?).to be false
+        expect(game_w_questions.current_level).to eq(2)
       end
     end
 
@@ -136,6 +139,9 @@ RSpec.describe Game, type: :model do
       it 'Game#answer_current_question!' do
         game_w_questions.current_level = 1
         expect(game_w_questions.answer_current_question!('c')).to be_falsy
+        expect(game_w_questions.status).to eq(:fail)
+        expect(game_w_questions.finished?).to be true
+        expect(game_w_questions.prize).to eq(0)
       end
     end
 
@@ -143,13 +149,20 @@ RSpec.describe Game, type: :model do
       it 'Game#answer_current_question!' do
         game_w_questions.current_level = 14
         expect(game_w_questions.answer_current_question!('d')).to be_truthy
+        expect(game_w_questions.status).to eq(:won)
+        expect(game_w_questions.finished?).to be true
+        expect(game_w_questions.prize).to eq(1000000)
       end
     end
 
     context 'Ответ по истечении времени' do
       it 'Game#answer_current_question!' do
+        game_w_questions.current_level = 6
         game_w_questions.created_at = Time.now - (1*35*60)
         expect(game_w_questions.answer_current_question!('d')).to be_falsy
+        expect(game_w_questions.status).to eq(:timeout)
+        expect(game_w_questions.finished?).to be true
+        expect(game_w_questions.prize).to eq(1000) # время вышло, получает выигрыш равный первой несгораеммой сумме
       end
     end
   end
