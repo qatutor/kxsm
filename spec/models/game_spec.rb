@@ -112,10 +112,8 @@ RSpec.describe Game, type: :model do
 
   context 'task 61-6' do
     it 'Game#current_game_question' do
-      expect(game_w_questions.current_game_question[:a]).to eq(4)
-      expect(game_w_questions.current_game_question[:b]).to eq(3)
-      expect(game_w_questions.current_game_question[:c]).to eq(2)
-      expect(game_w_questions.current_game_question[:d]).to eq(1)
+      game_w_questions.current_level = 5
+      expect(game_w_questions.game_questions[5]).to eq(game_w_questions.current_game_question)
     end
 
     it 'Game#previous_level' do
