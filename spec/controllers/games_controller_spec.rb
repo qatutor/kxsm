@@ -15,14 +15,14 @@ RSpec.describe GamesController, type: :controller do
     end
 
     describe 'task 62-4' do
-      it 'create a new game' do
+      it 'attempts to create a new game' do
         post :create
         expect(response.status).not_to eq(200)
         expect(response).to redirect_to(new_user_session_path)
         expect(flash[:alert]).to be
       end
 
-      it 'takes money' do
+      it 'attempts to take money' do
         game_w_questions.update_attribute(:current_level, 2)
         put :take_money, id:game_w_questions.id
         game = assigns(:game)
@@ -32,7 +32,7 @@ RSpec.describe GamesController, type: :controller do
         expect(flash[:alert]).to be
       end
 
-      it 'answers the question' do
+      it 'attempts to answer the question' do
         put :answer, id:game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key
         game = assigns(:game)
         expect(game).to be_nil
