@@ -1,5 +1,6 @@
 #  (c) goodprogrammer.ru
 #
+require 'game_help_generator'
 # Игровой вопрос — модель, которая связывает игру и вопрос. При создании новой
 # игры формируется массив из 15 игровых вопросов для конкретной игры.
 class GameQuestion < ActiveRecord::Base
@@ -90,8 +91,27 @@ class GameQuestion < ActiveRecord::Base
     save
   end
 
+
+  # Добавляем в help_hash подсказку друга и сохраняем объект
   def add_friend_call
-    self.help_hash[:friend_call] = 'Василий Петрович считает, что правильный ответ A'
+    # Массив ключей
+    keys_to_use = keys_to_use_in_help
+
+    self.help_hash[:friend_call] =
+        GameHelpGenerator.friend_call(keys_to_use, correct_answer_key)
+
     save
+  end
+
+  private
+
+  # Рассчитываем какие ключи нам доступны в подсказках
+  def keys_to_use_in_help
+    keys_to_use = variants.keys
+
+    # Учитываем наличие подсказки 50/50
+    keys_to_use = help_hash[:fifty_fifty] if help_hash.has_key?(:fifty_fifty)
+
+    keys_to_use
   end
 end

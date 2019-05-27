@@ -84,12 +84,14 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.help_hash).to include(:fifty_fifty)
       expect(game_question.help_hash[:fifty_fifty]).to eq(['a', 'b'])
     end
+  end
 
-    it 'verifies friend_call method' do
-      expect(game_question.help_hash).to be_empty
-      game_question.add_friend_call
-      expect(game_question.help_hash).to include(:friend_call)
-      expect(game_question.help_hash[:friend_call]).to eq('Василий Петрович считает, что правильный ответ A')
-    end
+  context 'task 63-3' do
+   it 'verifies friend_call method' do
+     expect(game_question.help_hash).to be_empty
+     game_question.add_friend_call
+     expect(game_question.help_hash).to include(:friend_call)
+     expect(game_question.help_hash[:friend_call]).not_to be_empty
+   end
   end
 end
