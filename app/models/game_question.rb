@@ -68,6 +68,13 @@ class GameQuestion < ActiveRecord::Base
     variants[correct_answer_key]
   end
 
+  # help_hash у нас имеет такой формат:
+  # {
+  #   fifty_fifty: ['a', 'b'], # При использовании подсказски остались варианты a и b
+  #   audience_help: {'a' => 42, 'c' => 37 ...}, # Распределение голосов по вариантам a, b, c, d
+  #   friend_call: 'Василий Петрович считает, что правильный ответ A'
+  # }
+
   def add_audience_help
     self.help_hash[:audience_help] = {
         'a' => rand(100),
@@ -75,6 +82,16 @@ class GameQuestion < ActiveRecord::Base
         'c' => rand(100),
         'd' => rand(100)
     }
+    save
+  end
+
+  def add_fifty_fifty
+    self.help_hash[:fifty_fifty] = ['a', 'b']
+    save
+  end
+
+  def add_friend_call
+    self.help_hash[:friend_call] = 'Василий Петрович считает, что правильный ответ A'
     save
   end
 end

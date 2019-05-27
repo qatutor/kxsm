@@ -67,4 +67,29 @@ RSpec.describe GameQuestion, type: :model do
       expect(ah.keys).to contain_exactly('a', 'b', 'c', 'd')
     end
   end
+
+  context 'task 63-1' do
+    it 'verifies help_hash method' do
+      game_question.help_hash[:audience_help] = { 'a' => 30, 'b' => 30, 'c' => 30, 'd' => 10}
+      game_question.save
+      question = GameQuestion.find(game_question.id)
+      expect(question.help_hash).to eq(audience_help: {'a' => 30, 'b' => 30, 'c' => 30, 'd' => 10})
+    end
+  end
+
+  context 'task 63-2' do
+    it 'verifies fifty_fifty method' do
+      expect(game_question.help_hash).to be_empty
+      game_question.add_fifty_fifty
+      expect(game_question.help_hash).to include(:fifty_fifty)
+      expect(game_question.help_hash[:fifty_fifty]).to eq(['a', 'b'])
+    end
+
+    it 'verifies friend_call method' do
+      expect(game_question.help_hash).to be_empty
+      game_question.add_friend_call
+      expect(game_question.help_hash).to include(:friend_call)
+      expect(game_question.help_hash[:friend_call]).to eq('Василий Петрович считает, что правильный ответ A')
+    end
+  end
 end
