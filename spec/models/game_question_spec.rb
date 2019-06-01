@@ -83,7 +83,7 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.help_hash).to be_empty
       game_question.add_fifty_fifty
       expect(game_question.help_hash).to include(:fifty_fifty)
-      expect(game_question.help_hash[:fifty_fifty]).to eq(['a', 'b'])
+      expect(game_question.help_hash[:fifty_fifty]).to include('b')
     end
   end
 
