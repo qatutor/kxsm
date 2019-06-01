@@ -1,6 +1,7 @@
 # (c) goodprogrammer.ru
 
 require 'rails_helper'
+require 'game_help_generator'
 
 # Тестовый сценарий для модели игрового вопроса, в идеале весь наш функционал
 # (все методы) должны быть протестированы.
@@ -87,11 +88,14 @@ RSpec.describe GameQuestion, type: :model do
   end
 
   context 'task 63-3' do
-   it 'verifies friend_call method' do
-     expect(game_question.help_hash).to be_empty
-     game_question.add_friend_call
-     expect(game_question.help_hash).to include(:friend_call)
-     expect(game_question.help_hash[:friend_call]).not_to be_empty
+    it 'verifies friend_call method' do
+      expect(game_question.help_hash).to be_empty
+      game_question.add_friend_call
+      expect(game_question.help_hash).to include(:friend_call)
+      expect(game_question.help_hash[:friend_call]).not_to be_empty
+      friend_answer = GameHelpGenerator.friend_call(["a", "b", "c", "d"], 'b')
+      expect(friend_answer).to end_with "считает, что это вариант B"
+      expect(game_question.help_hash[:friend_call]).to end_with "считает, что это вариант B"
    end
   end
 end
