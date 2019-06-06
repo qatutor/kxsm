@@ -155,7 +155,7 @@ RSpec.describe GamesController, type: :controller do
         game = assigns(:game)
         expect(game.finished?).to be_falsey
         expect(game.fifty_fifty_used).to be_truthy
-        expect(game.current_game_question.help_hash[:fifty_fifty]).to be
+        expect(game.current_game_question.help_hash[:fifty_fifty].size).to eq(2)
         expect(game.current_game_question.help_hash[:fifty_fifty]).to include(game.current_game_question.correct_answer_key)
         expect(response).to redirect_to(game_path(game_w_questions))
         expect(flash{:info}).to be
